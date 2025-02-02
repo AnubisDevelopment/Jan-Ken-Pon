@@ -1,8 +1,6 @@
 console.log("hello world")
 
 
-
-
 function getComputerChoice (choice){
     //pick number 0,1,2
     let selection = Math.floor(Math.random() * 3)
@@ -16,8 +14,7 @@ function getComputerChoice (choice){
     }
 }
 
-function getHumanChoice (ask){
-    let choice = ''
+/*function getHumanChoice (ask){
     let answer = prompt('Type rock, paper, or scissors')
     if(answer.toLowerCase() === 'rock'){
         return 'rock'
@@ -28,6 +25,7 @@ function getHumanChoice (ask){
     }
     console.log(answer)
 }
+*/
 
 //defines scores in global scope
 let humanScore = 0
@@ -38,18 +36,25 @@ function playRound(x,y){
     let paper = 'paper'
     let scissors = 'scissors'
     if (y === rock && x === scissors){
-        return (humanScore += 1) && console.log('You win, rock beats scissors')
+        para.textContent = 'You win, rock beats scissors'; humanScore += 1;
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
     } else if (y === paper && x === scissors){
-        return (computerScore += 1) && console.log('You lose! Scissors beats paper')
+        computerScore += 1; para.textContent = 'You lose! Scissors beats paper';
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
     } else if (y === scissors && x === rock) {
-        return (computerScore += 1) && console.log('You lose, rock beats scissors')
+        computerScore += 1; para.textContent = 'You lose, rock beats scissors';
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
     } else if (y === scissors && x === paper){
-        return (humanScore += 1) && console.log('You win scissors beats paper')
+        humanScore += 1; para.textContent = 'You win scissors beats paper';
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
     }else if(y === rock && x === paper){
-        return (computerScore += 1) && console.log('You lose paper beats rock')
+        computerScore += 1; para.textContent = 'You lose paper beats rock';
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
     }else if(y === paper && x === rock){
-        console.log('You win, paper beats rock')
-    } else console.log('Its a tie!')
+        humanScore += 1; para.textContent = 'You win, paper beats rock';
+        currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
+    } else para.textContent = 'Its a tie!';
+    currentHumanScore.innerHTML = humanScore; currentComputerScore.innerHTML = computerScore
 }
 
 //plays a game with 'num' amount of rounds
@@ -61,4 +66,49 @@ function playGame(num){
     console.log(`Human Score is ${humanScore} and the Computer Score is ${computerScore}`)    
 }
 
-playGame(5)
+//playGame(5)
+// DOM Manipulation
+const rock = document.querySelector('.rockButton')
+const paper = document.querySelector('.paperButton')
+const scissors = document.querySelector('.scissorsButton')
+
+rock.addEventListener('click', function(){
+    playRound(getComputerChoice(), 'rock')
+    announceWinner()
+})
+
+paper.addEventListener('click', function(){
+    playRound(getComputerChoice(), 'paper')
+    announceWinner()
+})
+
+scissors.addEventListener('click', function(){
+    playRound(getComputerChoice(), 'scissors')
+    announceWinner()
+})
+//show who won in the DOM
+let div = document.querySelector('.divResults')
+let para = document.createElement('p')
+para.style.fontSize = ('26px')
+div.appendChild(para)
+//show tallying score in DOM
+let currentHumanScore = document.querySelector('.humanScoreCard')
+let currentComputerScore = document.querySelector('.computerScoreCard')
+
+currentHumanScore.style.fontSize = ('30px')
+currentComputerScore.style.fontSize = ('30px')
+
+currentHumanScore.innerHTML = humanScore
+currentComputerScore.innerHTML = computerScore
+//when human score or computer score reaches 5 points announce winner
+let whoWon = document.createElement('p')
+whoWon.style.fontSize = ('30px')
+function announceWinner(){
+    if (humanScore == 5) {
+        whoWon.textContent = 'You won the game with a score of 5 points! Nice job!';
+        div.appendChild(whoWon)
+    } else if (computerScore == 5){
+        whoWon.textContent = 'The Computer won the game with a score of 5 points! Better luck next time!';
+        div.appendChild(whoWon)
+    }
+}
